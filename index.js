@@ -73,6 +73,7 @@ const init = async () => {
           cors: {
               origin: ['*'],
               additionalHeaders: ['cache-control', 'x-requested-width']
+              
           }
       },
       handler: async function (request, reply) {
