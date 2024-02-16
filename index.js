@@ -33,28 +33,36 @@ const init = async () => {
   //---------
 
   await server.register(require('@hapi/inert'));
-
+//-------- AuthBearer -------
   await server.register(AuthBearer);
- server.auth.strategy("simple", "bearer-access-token", {
-   allowQueryToken: true, // optional, false by default
-   validate: async (request, token, h) => {
-     // here is where you validate your token
-     // comparing with token from your database for example
-     const isValid = token === "1234567890";
-     const credentials = { token };
-     const artifacts = { test: "info" };
-     return { isValid, credentials, artifacts };
-   },
- });
- server.auth.default("simple");
-
+  server.auth.strategy("simple", "bearer-access-token", {
+    allowQueryToken: true, // optional, false by default
+    validate: async (request, token, h) => {
+      // here is where you validate your token
+      // comparing with token from your database for example
+      const isValid = token === "1234567890";
+      const credentials = { token };
+      const artifacts = { test: "info" };
+      return { isValid, credentials, artifacts };
+    },
+  });
+  server.auth.default("simple");
+//-------- AuthBearer -------
   server.route({
     method: "GET",
     path: "/",
+    config: {
+      cors: {
+        origin: ["*"],
+        additionalHeaders: ["cache-control", "x-requested-width"],
+        credentials: true,
+      },
+    },
     handler: () => {
-      return '<h3> Welcome to API Back-end Ver. 1.0.0</h3>';
-    }
+      return "<h3> Welcome to API Back-end Ver. 1.0.0</h3>";
+    },
   });
+
 
 
     //API: http://localhost:3001/api/movie/all
